@@ -1,0 +1,2 @@
+# japan
+Japan travel blog
