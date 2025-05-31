@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { JournalEntry as JournalEntryType } from '../lib/posts';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
@@ -14,19 +14,75 @@ interface JournalEntryProps {
 }
 
 const JournalEntry: React.FC<JournalEntryProps> = ({ entry }) => {
-  // Convert Markdown to HTML using unified, remark-parse, and remark-html
-  const contentHtml = useMemo(() => {
+  // Extract Flickr embeds and process content
+  const { contentHtml, flickrEmbeds } = useMemo(() => {
     try {
+      // Find Flickr embed codes
+      const flickrRegex = /<a data-flickr-embed="true"[^>]*>[\s\S]*?<\/a><script[^>]*src="\/\/embedr\.flickr\.com\/assets\/client-code\.js"[^>]*><\/script>/g;
+      const embeds = entry.content.match(flickrRegex) || [];
+      
+      // Remove Flickr embeds from content for markdown processing (completely remove them)
+      const contentWithoutEmbeds = entry.content.replace(flickrRegex, '');
+      
+      // Process markdown
       const result = unified()
         .use(remarkParse)
         .use(remarkHtml)
-        .processSync(entry.content);
-      return result.toString();
+        .processSync(contentWithoutEmbeds);
+      
+      return {
+        contentHtml: result.toString(),
+        flickrEmbeds: embeds
+      };
     } catch (error) {
       console.error('Error parsing markdown:', error);
-      return entry.content; // Fallback to raw content if processing fails
+      return {
+        contentHtml: entry.content,
+        flickrEmbeds: []
+      };
     }
   }, [entry.content]);
+
+  // Load Flickr script when embeds are present
+  useEffect(() => {
+    if (flickrEmbeds.length > 0) {
+      // Check if script already exists
+      const existingScript = document.querySelector('script[src*="embedr.flickr.com"]');
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.src = '//embedr.flickr.com/assets/client-code.js';
+        script.async = true;
+        script.charset = 'utf-8';
+        document.head.appendChild(script);
+      }
+    }
+  }, [flickrEmbeds]);
+
+  // Render content with Flickr embeds
+  const renderContent = () => {
+    const result: React.ReactNode[] = [];
+
+    // Add the main content first
+    result.push(
+      <div key="main-content" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+    );
+
+    // Add Flickr embeds at the end, centered
+    flickrEmbeds.forEach((embed, index) => {
+      const embedMatch = embed.match(/<a data-flickr-embed="true"[^>]*>[\s\S]*?<\/a>/);
+      if (embedMatch) {
+        result.push(
+          <div 
+            key={`flickr-${index}`} 
+            className="my-8 flex justify-center"
+            dangerouslySetInnerHTML={{ __html: embedMatch[0] }} 
+          />
+        );
+      }
+    });
+
+    return result;
+  };
 
   return (
     <div className="space-y-6">
@@ -68,10 +124,9 @@ const JournalEntry: React.FC<JournalEntryProps> = ({ entry }) => {
       {/* Article Content */}
       <Card className="border-stone-200/60 shadow-sm bg-white/80 backdrop-blur-sm">
         <CardContent className="p-8">
-          <div 
-            className="prose prose-lg max-w-none" 
-            dangerouslySetInnerHTML={{ __html: contentHtml }}
-          />
+          <div className="prose prose-lg max-w-none">
+            {renderContent()}
+          </div>
         </CardContent>
       </Card>
     </div>
