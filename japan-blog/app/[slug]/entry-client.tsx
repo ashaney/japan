@@ -2,10 +2,11 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { motion } from "motion/react";
 import JournalEntry from '../../components/JournalEntry';
 import { JournalEntry as JournalEntryType } from '../../lib/posts';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { ArrowLeft, BookOpen } from 'lucide-react';
+import { ArrowLeft, BookOpen, Image, Video } from 'lucide-react';
 
 interface EntryClientProps {
   entry: JournalEntryType;
@@ -34,25 +35,51 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
       <header className="border-b border-stone-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-              <ArrowLeft className="w-5 h-5 text-stone-600" />
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
-                  <span className="font-bold text-lg">🇯🇵</span>
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold text-stone-900 tracking-tight">JST Life</h1>
-                </div>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
+                <span className="font-bold text-lg">🇯🇵</span>
               </div>
-            </Link>
+              <div>
+                <h1 className="text-2xl font-bold text-stone-900 tracking-tight">JST Life</h1>
+                <p className="text-stone-600 text-sm">Travels and daily life in Japan</p>
+              </div>
+            </div>
+            <nav className="flex items-center space-x-6">
+              <Link href="/" className="text-stone-600 hover:text-amber-600 transition-colors">
+                <ArrowLeft className="w-4 h-4" />
+              </Link>
+              <a 
+                href="https://flic.kr/s/aHBqjCgaGe" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
+              >
+                <Image className="w-4 h-4" />
+                <span className="text-sm font-medium">Photos</span>
+              </a>
+              <a 
+                href="https://www.youtube.com/playlist?list=PLeZOGv1nZ2p5RMu4jTovwSbIIBvOY5JaT" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
+              >
+                <Video className="w-4 h-4" />
+                <span className="text-sm font-medium">Videos</span>
+              </a>
+            </nav>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="container mx-auto px-6 py-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Sidebar */}
-          <aside className="lg:col-span-1 space-y-6">
+          <motion.aside 
+            className="lg:col-span-1 space-y-6"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             {/* Recent Posts Timeline */}
             <Card className="border-stone-200/60 shadow-sm bg-white/60 backdrop-blur-sm" style={{ gap: '0', paddingTop: '12px', paddingBottom: '12px' }}>
               <CardHeader className="pb-1">
@@ -64,9 +91,14 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
               <CardContent className="space-y-3">
                 {allEntries.map((entryItem, index) => (
                   <Link key={entryItem.slug} href={`/${entryItem.slug}`}>
-                    <div className={`relative p-2 rounded-lg transition-colors hover:bg-stone-100 ${
-                      entryItem.slug === entry.slug ? 'bg-amber-50 border border-amber-200' : ''
-                    }`}>
+                    <motion.div 
+                      className={`relative p-2 rounded-lg transition-colors hover:bg-stone-100 ${
+                        entryItem.slug === entry.slug ? 'bg-amber-50 border border-amber-200' : ''
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    >
                       {index !== allEntries.length - 1 && (
                         <div className="absolute left-3 top-10 w-px h-8 bg-gradient-to-b from-stone-300 to-transparent" />
                       )}
@@ -80,17 +112,22 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
                           })}</p>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   </Link>
                 ))}
               </CardContent>
             </Card>
-          </aside>
+          </motion.aside>
 
           {/* Main Content */}
-          <main className="lg:col-span-3">
+          <motion.main 
+            className="lg:col-span-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <JournalEntry entry={entry} />
-          </main>
+          </motion.main>
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ import { Badge } from "../components/ui/badge";
 import { Separator } from "../components/ui/separator";
 
 // Import Lucide icons
-import { CalendarDays, MapPin, Plane, BookOpen, ChevronDown, ChevronUp, Utensils, Camera, Building, Train, Heart, Coffee } from "lucide-react";
+import { CalendarDays, MapPin, Plane, BookOpen, ChevronDown, ChevronUp, Utensils, Camera, Building, Train, Heart, Coffee, Video, Image } from "lucide-react";
 
 interface HomeClientProps {
   entries: JournalEntry[];
@@ -20,10 +20,17 @@ interface HomeClientProps {
 export default function HomeClient({ entries }: HomeClientProps) {
   // State for showing all entries
   const [showAllEntries, setShowAllEntries] = useState(false);
+  // State for mobile sidebar visibility
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   
   // Toggle between showing all entries or just recent ones
   const toggleShowAll = () => {
     setShowAllEntries(!showAllEntries);
+  };
+  
+  // Toggle mobile sidebar
+  const toggleMobileSidebar = () => {
+    setShowMobileSidebar(!showMobileSidebar);
   };
   
   // Function to get the appropriate icon for an entry based on its tags
@@ -64,7 +71,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
     <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50/30">
       {/* Header */}
       <header className="border-b border-stone-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-6">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
@@ -75,14 +82,46 @@ export default function HomeClient({ entries }: HomeClientProps) {
                 <p className="text-stone-600 text-sm">Travels and daily life in Japan</p>
               </div>
             </div>
+            <nav className="flex items-center space-x-6">
+              <a 
+                href="https://flic.kr/s/aHBqjCgaGe" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
+              >
+                <Image className="w-4 h-4" />
+                <span className="text-sm font-medium">Photos</span>
+              </a>
+              <a 
+                href="https://www.youtube.com/playlist?list=PLeZOGv1nZ2p5RMu4jTovwSbIIBvOY5JaT" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
+              >
+                <Video className="w-4 h-4" />
+                <span className="text-sm font-medium">Videos</span>
+              </a>
+            </nav>
           </div>
         </div>
       </header>
 
       <div className="container mx-auto px-6 py-4">
+        {/* Mobile Sidebar Toggle */}
+        <div className="lg:hidden mb-4">
+          <button
+            onClick={toggleMobileSidebar}
+            className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm border border-stone-200/60 rounded-lg hover:bg-white transition-colors"
+          >
+            <BookOpen className="w-4 h-4 text-amber-600" />
+            <span className="text-sm font-medium text-stone-900">All Entries</span>
+            {showMobileSidebar ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Sidebar */}
-          <aside className="lg:col-span-1 space-y-3">
+          <aside className={`lg:col-span-1 space-y-3 ${showMobileSidebar ? 'block' : 'hidden lg:block'}`}>
             {/* All Posts Link */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -299,7 +338,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
                       with rich formatting, images, and more.
                     </p>
                     <p>
-                      Browse through entries using the timeline on the left, or click on the recent entries above to
+                      Browse through entries using the timeline on the side (left on desktop, collapsible on mobile), or click on the recent entries to
                       read individual posts.
                     </p>
                   </div>

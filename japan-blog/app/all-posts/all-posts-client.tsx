@@ -6,7 +6,7 @@ import { motion } from "motion/react";
 import { JournalEntry } from '../../lib/posts';
 import { Card, CardContent } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
-import { ArrowLeft, Calendar, Tag, Search, SortAsc, SortDesc } from 'lucide-react';
+import { ArrowLeft, Calendar, Tag, Search, SortAsc, SortDesc, Image, Video } from 'lucide-react';
 
 interface AllPostsClientProps {
   entries: JournalEntry[];
@@ -76,17 +76,38 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
       <header className="border-b border-stone-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-              <ArrowLeft className="w-5 h-5 text-stone-600" />
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-stone-200 to-stone-300 rounded-lg flex items-center justify-center">
-                  <span className="font-bold text-sm">🇯🇵</span>
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold text-stone-900 tracking-tight">JST Life</h1>
-                </div>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
+                <span className="font-bold text-lg">🇯🇵</span>
               </div>
-            </Link>
+              <div>
+                <h1 className="text-2xl font-bold text-stone-900 tracking-tight">JST Life</h1>
+                <p className="text-stone-600 text-sm">Travels and daily life in Japan</p>
+              </div>
+            </div>
+            <nav className="flex items-center space-x-6">
+              <Link href="/" className="text-stone-600 hover:text-amber-600 transition-colors">
+                <ArrowLeft className="w-4 h-4" />
+              </Link>
+              <a 
+                href="https://flic.kr/s/aHBqjCgaGe" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
+              >
+                <Image className="w-4 h-4" />
+                <span className="text-sm font-medium">Photos</span>
+              </a>
+              <a 
+                href="https://www.youtube.com/playlist?list=PLeZOGv1nZ2p5RMu4jTovwSbIIBvOY5JaT" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
+              >
+                <Video className="w-4 h-4" />
+                <span className="text-sm font-medium">Videos</span>
+              </a>
+            </nav>
           </div>
         </div>
       </header>
