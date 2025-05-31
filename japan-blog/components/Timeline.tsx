@@ -47,7 +47,7 @@ const Timeline: React.FC<TimelineProps> = ({ entries }) => {
             <p>Add MDX files to the content/entries directory to get started.</p>
           </div>
         ) : (
-          entries.map((entry, index) => (
+          entries.map((entry) => (
             <div key={entry.slug} className="timeline-item">
               <div className={`timeline-dot ${getDotColor(entry.slug)}`}></div>
               <div className="timeline-content">

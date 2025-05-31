@@ -25,7 +25,7 @@ export const getTagColor = (tag: string): string => {
 };
 
 // Get all unique tags from entries
-export const getAllUniqueTags = (entries: any[]): string[] => {
+export const getAllUniqueTags = (entries: Array<{ tags: string[] }>): string[] => {
   const tagSet = new Set<string>();
   
   entries.forEach(entry => {

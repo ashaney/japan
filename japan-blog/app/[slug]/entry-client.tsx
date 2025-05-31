@@ -5,8 +5,7 @@ import Link from 'next/link';
 import JournalEntry from '../../components/JournalEntry';
 import { JournalEntry as JournalEntryType } from '../../lib/posts';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { Badge } from '../../components/ui/badge';
-import { ArrowLeft, BookOpen, Calendar, Plane, Utensils, Camera, Building, Train, Heart, Coffee, CalendarDays } from 'lucide-react';
+import { ArrowLeft, BookOpen } from 'lucide-react';
 
 interface EntryClientProps {
   entry: JournalEntryType;
@@ -14,37 +13,6 @@ interface EntryClientProps {
 }
 
 export default function EntryClient({ entry, allEntries }: EntryClientProps) {
-  // Function to get the appropriate icon for an entry based on its tags
-  const getEntryIcon = (tags: string[]) => {
-    const iconProps = "w-4 h-4 text-amber-600";
-    
-    // Check tags for specific content types
-    if (tags.some(tag => ["Travel", "Flight", "Airport", "Journey"].includes(tag))) {
-      return <Plane className={iconProps} />;
-    }
-    if (tags.some(tag => ["Food", "Restaurant", "Cooking", "Meal", "Eating"].includes(tag))) {
-      return <Utensils className={iconProps} />;
-    }
-    if (tags.some(tag => ["Photography", "Photo", "Pictures", "Camera", "Sightseeing"].includes(tag))) {
-      return <Camera className={iconProps} />;
-    }
-    if (tags.some(tag => ["Architecture", "Building", "Temple", "Shrine", "Museum"].includes(tag))) {
-      return <Building className={iconProps} />;
-    }
-    if (tags.some(tag => ["Train", "Railway", "Transportation", "Shinkansen", "Subway"].includes(tag))) {
-      return <Train className={iconProps} />;
-    }
-    if (tags.some(tag => ["Culture", "Experience", "Traditional", "Festival", "Local"].includes(tag))) {
-      return <Heart className={iconProps} />;
-    }
-    if (tags.some(tag => ["Coffee", "Cafe", "Tea", "Drinks", "Morning"].includes(tag))) {
-      return <Coffee className={iconProps} />;
-    }
-    
-    // Default icon
-    return <CalendarDays className={iconProps} />;
-  };
-
   // Function to get random color for timeline dots
   const getDotColor = (slug: string): string => {
     const flexokiColors = [

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from "motion/react";
 import { JournalEntry } from '../../lib/posts';
-import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
+import { Card, CardContent } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { ArrowLeft, Calendar, Tag, Search, SortAsc, SortDesc } from 'lucide-react';
 
@@ -51,8 +51,8 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
       return matchesSearch && matchesTag;
     })
     .sort((a, b) => {
-      let aValue = sortField === 'date' ? new Date(a.date).getTime() : a.title.toLowerCase();
-      let bValue = sortField === 'date' ? new Date(b.date).getTime() : b.title.toLowerCase();
+      const aValue = sortField === 'date' ? new Date(a.date).getTime() : a.title.toLowerCase();
+      const bValue = sortField === 'date' ? new Date(b.date).getTime() : b.title.toLowerCase();
       
       if (sortDirection === 'asc') {
         return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
@@ -252,8 +252,8 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
           {/* Results Summary */}
           <div className="mt-4 text-sm text-stone-600">
             Showing {filteredAndSortedEntries.length} of {entries.length} entries
-            {selectedTag && <span> • Filtered by "{selectedTag}"</span>}
-            {searchTerm && <span> • Searching for "{searchTerm}"</span>}
+            {selectedTag && <span> • Filtered by &ldquo;{selectedTag}&rdquo;</span>}
+            {searchTerm && <span> • Searching for &ldquo;{searchTerm}&rdquo;</span>}
           </div>
         </motion.div>
       </div>

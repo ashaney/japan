@@ -31,7 +31,7 @@ function safelyParseMdx(fileName: string): JournalEntry | null {
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     
     // Parse frontmatter with error handling
-    let data: any = {}
+    let data: Record<string, unknown> = {}
     let content = ''
     
     try {
@@ -53,10 +53,10 @@ function safelyParseMdx(fileName: string): JournalEntry | null {
     // Return formatted entry
     return {
       slug,
-      title: data.title || `Untitled (${slug})`,
-      date: data.date || new Date().toISOString().split('T')[0],
-      preview: data.preview || '',
-      tags: Array.isArray(data.tags) ? data.tags : [],
+      title: (data.title as string) || `Untitled (${slug})`,
+      date: (data.date as string) || new Date().toISOString().split('T')[0],
+      preview: (data.preview as string) || '',
+      tags: Array.isArray(data.tags) ? (data.tags as string[]) : [],
       content,
       readingTime: readingTime(content).text,
     }
