@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "Documenting travels across and daily life in Japan",
   icons: {
     icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
