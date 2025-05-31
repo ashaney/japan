@@ -35,7 +35,7 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
       <header className="border-b border-stone-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
                 <span className="font-bold text-lg">🇯🇵</span>
               </div>
@@ -43,7 +43,7 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
                 <h1 className="text-2xl font-bold text-stone-900 tracking-tight">JST Life</h1>
                 <p className="text-stone-600 text-sm">Travels and daily life in Japan</p>
               </div>
-            </div>
+            </Link>
             <nav className="flex items-center space-x-6">
               <Link href="/" className="text-stone-600 hover:text-amber-600 transition-colors">
                 <ArrowLeft className="w-4 h-4" />

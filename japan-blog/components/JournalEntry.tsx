@@ -7,6 +7,7 @@ import remarkParse from 'remark-parse';
 import remarkHtml from 'remark-html';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Badge } from './ui/badge';
+import { Separator } from './ui/separator';
 import { CalendarDays, Clock } from 'lucide-react';
 
 interface JournalEntryProps {
@@ -85,51 +86,49 @@ const JournalEntry: React.FC<JournalEntryProps> = ({ entry }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <Card className="border-stone-200/60 shadow-sm bg-white/80 backdrop-blur-sm">
       {/* Article Header */}
-      <Card className="border-stone-200/60 shadow-sm bg-white/80 backdrop-blur-sm">
-        <CardHeader className="space-y-4">
-          <h1 className="text-3xl font-bold text-stone-900 leading-tight">{entry.title}</h1>
-          
-          <div className="flex items-center space-x-6 text-sm text-stone-600">
-            <div className="flex items-center space-x-2">
-              <CalendarDays className="w-4 h-4" />
-              <span>{new Date(entry.date).toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Clock className="w-4 h-4" />
-              <span>{entry.readingTime}</span>
-            </div>
+      <CardHeader className="space-y-4">
+        <h1 className="text-3xl font-bold text-stone-900 leading-tight">{entry.title}</h1>
+        
+        <div className="flex items-center space-x-6 text-sm text-stone-600">
+          <div className="flex items-center space-x-2">
+            <CalendarDays className="w-4 h-4" />
+            <span>{new Date(entry.date).toLocaleDateString('en-US', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}</span>
           </div>
-          
-          <div className="flex flex-wrap gap-2">
-            {entry.tags.map((tag) => (
-              <Badge
-                key={tag}
-                variant="outline"
-                className="border-stone-300 text-stone-700 bg-stone-50 hover:bg-stone-100 transition-colors"
-              >
-                {tag}
-              </Badge>
-            ))}
+          <div className="flex items-center space-x-2">
+            <Clock className="w-4 h-4" />
+            <span>{entry.readingTime}</span>
           </div>
-        </CardHeader>
-      </Card>
+        </div>
+        
+        <div className="flex flex-wrap gap-2">
+          {entry.tags.map((tag) => (
+            <Badge
+              key={tag}
+              variant="outline"
+              className="border-stone-300 text-stone-700 bg-stone-50 hover:bg-stone-100 transition-colors"
+            >
+              {tag}
+            </Badge>
+          ))}
+        </div>
+      </CardHeader>
+      
+      <Separator className="bg-stone-200" />
       
       {/* Article Content */}
-      <Card className="border-stone-200/60 shadow-sm bg-white/80 backdrop-blur-sm">
-        <CardContent className="p-8">
-          <div className="prose prose-lg max-w-none">
-            {renderContent()}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+      <CardContent className="px-8 pt-1 pb-8">
+        <div className="prose prose-lg max-w-none [&>div>h3:first-child]:mt-0">
+          {renderContent()}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

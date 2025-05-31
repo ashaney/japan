@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "JST Life",
   description: "Documenting travels across and daily life in Japan",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
