@@ -1,2 +1,2 @@
 # japan
-Japan travel blog
+Documenting travels and daily life in Japanese Standard Time
