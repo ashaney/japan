@@ -1,12 +1,12 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from "motion/react";
 import JournalEntry from '../../components/JournalEntry';
 import { JournalEntry as JournalEntryType } from '../../lib/posts';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { ArrowLeft, BookOpen, Image, Video } from 'lucide-react';
+import { ArrowLeft, BookOpen, Image, Video, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface EntryClientProps {
   entry: JournalEntryType;
@@ -14,6 +14,14 @@ interface EntryClientProps {
 }
 
 export default function EntryClient({ entry, allEntries }: EntryClientProps) {
+  // State for mobile sidebar visibility
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  
+  // Toggle mobile sidebar
+  const toggleMobileSidebar = () => {
+    setShowMobileSidebar(!showMobileSidebar);
+  };
+
   // Function to get random color for timeline dots
   const getDotColor = (slug: string): string => {
     const flexokiColors = [
@@ -72,10 +80,22 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-4">
+        {/* Mobile Sidebar Toggle */}
+        <div className="lg:hidden mb-4">
+          <button
+            onClick={toggleMobileSidebar}
+            className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm border border-stone-200/60 rounded-lg hover:bg-white transition-colors"
+          >
+            <BookOpen className="w-4 h-4 text-amber-600" />
+            <span className="text-sm font-medium text-stone-900">All Entries</span>
+            {showMobileSidebar ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Sidebar */}
           <motion.aside 
-            className="lg:col-span-1 space-y-3"
+            className={`lg:col-span-1 space-y-3 ${showMobileSidebar ? 'block' : 'hidden lg:block'}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}

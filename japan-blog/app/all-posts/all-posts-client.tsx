@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { motion } from "motion/react";
 import { JournalEntry } from '../../lib/posts';
 import { Card, CardContent } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
@@ -206,7 +205,7 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredAndSortedEntries.map((entry, index) => (
+                    {filteredAndSortedEntries.map((entry) => (
                       <tr
                         key={entry.slug}
                         className="border-b border-stone-100 hover:bg-stone-50/50 transition-colors"
