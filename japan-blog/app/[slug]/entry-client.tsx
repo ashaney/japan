@@ -37,8 +37,8 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <ArrowLeft className="w-5 h-5 text-stone-600" />
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-red-400 to-rose-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">🇯🇵</span>
+                <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
+                  <span className="font-bold text-lg">🇯🇵</span>
                 </div>
                 <div>
                   <h1 className="text-lg font-bold text-stone-900 tracking-tight">JST Life</h1>
