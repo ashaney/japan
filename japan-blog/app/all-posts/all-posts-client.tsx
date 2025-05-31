@@ -113,11 +113,7 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
       </header>
 
       <div className="container mx-auto px-6 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div>
           {/* Page Title */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-stone-900 mb-2">All Entries</h1>
@@ -211,11 +207,8 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
                   </thead>
                   <tbody>
                     {filteredAndSortedEntries.map((entry, index) => (
-                      <motion.tr
+                      <tr
                         key={entry.slug}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
                         className="border-b border-stone-100 hover:bg-stone-50/50 transition-colors"
                       >
                         <td className="p-4">
@@ -256,7 +249,7 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
                             ))}
                           </div>
                         </td>
-                      </motion.tr>
+                      </tr>
                     ))}
                   </tbody>
                 </table>
@@ -276,7 +269,7 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
             {selectedTag && <span> • Filtered by &ldquo;{selectedTag}&rdquo;</span>}
             {searchTerm && <span> • Searching for &ldquo;{searchTerm}&rdquo;</span>}
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

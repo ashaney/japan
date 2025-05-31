@@ -33,7 +33,7 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
     <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50/30">
       {/* Header */}
       <header className="border-b border-stone-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
@@ -71,11 +71,11 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-4">
+      <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Sidebar */}
           <motion.aside 
-            className="lg:col-span-1 space-y-6"
+            className="lg:col-span-1 space-y-3"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}

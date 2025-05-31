@@ -70,6 +70,11 @@
     border-color: theme(colors.border);
   }
   
+  html {
+    /* Always show scrollbar to prevent layout shifts */
+    overflow-y: scroll;
+  }
+  
   body {
     background: theme(colors.background);
     color: theme(colors.foreground);

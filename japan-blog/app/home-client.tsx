@@ -71,7 +71,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
     <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50/30">
       {/* Header */}
       <header className="border-b border-stone-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
@@ -83,6 +83,8 @@ export default function HomeClient({ entries }: HomeClientProps) {
               </div>
             </Link>
             <nav className="flex items-center space-x-6">
+              {/* Empty space to match post page back button */}
+              <div className="w-4 h-4"></div>
               <a 
                 href="https://flic.kr/s/aHBqjCgaGe" 
                 target="_blank" 
@@ -106,7 +108,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
         </div>
       </header>
 
-      <div className="container mx-auto px-6 py-4">
+      <div className="max-w-7xl mx-auto px-6 py-4">
         {/* Mobile Sidebar Toggle */}
         <div className="lg:hidden mb-4">
           <button
@@ -351,7 +353,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
 
       {/* Footer */}
       <footer className="border-t border-stone-200/60 bg-white/60 backdrop-blur-sm mt-6">
-        <div className="container mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <MapPin className="w-4 h-4 text-amber-600" />
