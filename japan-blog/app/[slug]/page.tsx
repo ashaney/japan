@@ -7,8 +7,8 @@ interface PageParams {
   slug: string;
 }
 
-export default function EntryPage({ params }: { params: PageParams }) {
-  const { slug } = params;
+export default async function EntryPage({ params }: { params: Promise<PageParams> }) {
+  const { slug } = await params;
   const entry = getEntryBySlug(slug);
   const allEntries = getAllEntries();
   

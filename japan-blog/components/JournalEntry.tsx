@@ -5,7 +5,9 @@ import { JournalEntry as JournalEntryType } from '../lib/posts';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkHtml from 'remark-html';
-import Tag from './Tag';
+import { Card, CardContent, CardHeader } from './ui/card';
+import { Badge } from './ui/badge';
+import { CalendarDays, Clock } from 'lucide-react';
 
 interface JournalEntryProps {
   entry: JournalEntryType;
@@ -27,31 +29,51 @@ const JournalEntry: React.FC<JournalEntryProps> = ({ entry }) => {
   }, [entry.content]);
 
   return (
-    <div className="journal-content">
-      <div className="journal-header">
-        <h1 className="journal-title">{entry.title}</h1>
-        <div className="journal-meta">
-          <div className="journal-date">
-            {new Date(entry.date).toLocaleDateString('en-US', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
+    <div className="space-y-6">
+      {/* Article Header */}
+      <Card className="border-stone-200/60 shadow-sm bg-white/80 backdrop-blur-sm">
+        <CardHeader className="space-y-4">
+          <h1 className="text-3xl font-bold text-stone-900 leading-tight">{entry.title}</h1>
+          
+          <div className="flex items-center space-x-6 text-sm text-stone-600">
+            <div className="flex items-center space-x-2">
+              <CalendarDays className="w-4 h-4" />
+              <span>{new Date(entry.date).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4" />
+              <span>{entry.readingTime}</span>
+            </div>
           </div>
-          <div className="journal-reading-time">{entry.readingTime}</div>
-        </div>
-        <div className="journal-tags">
-          {entry.tags.map((tag) => (
-            <Tag key={tag} name={tag} />
-          ))}
-        </div>
-      </div>
+          
+          <div className="flex flex-wrap gap-2">
+            {entry.tags.map((tag) => (
+              <Badge
+                key={tag}
+                variant="outline"
+                className="border-stone-300 text-stone-700 bg-stone-50 hover:bg-stone-100 transition-colors"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </CardHeader>
+      </Card>
       
-      <div 
-        className="journal-body" 
-        dangerouslySetInnerHTML={{ __html: contentHtml }}
-      />
+      {/* Article Content */}
+      <Card className="border-stone-200/60 shadow-sm bg-white/80 backdrop-blur-sm">
+        <CardContent className="p-8">
+          <div 
+            className="prose prose-lg max-w-none" 
+            dangerouslySetInnerHTML={{ __html: contentHtml }}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 };
