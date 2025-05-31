@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion } from "motion/react";
 import { ChevronLeft, ChevronRight, ExternalLink, Camera } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -63,16 +64,22 @@ export default function FlickrAlbum({ albumId, title = "Photo Album", photos, cl
           <CardContent className="space-y-4">
             {/* Main Image */}
             <div className="relative aspect-video bg-stone-100 rounded-lg overflow-hidden">
-              <motion.img
+              <motion.div
                 key={currentIndex}
-                src={photos[currentIndex]?.url_l || photos[currentIndex]?.url_m}
-                alt={photos[currentIndex]?.title}
-                className="w-full h-full object-cover cursor-pointer"
+                className="w-full h-full cursor-pointer"
                 onClick={() => openLightbox(currentIndex)}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
-              />
+              >
+                <Image
+                  src={photos[currentIndex]?.url_l || photos[currentIndex]?.url_m}
+                  alt={photos[currentIndex]?.title || 'Photo'}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </motion.div>
               
               {/* Navigation Arrows */}
               {photos.length > 1 && (
@@ -105,7 +112,7 @@ export default function FlickrAlbum({ albumId, title = "Photo Album", photos, cl
                   <motion.button
                     key={photo.id}
                     onClick={() => setCurrentIndex(index)}
-                    className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
                       index === currentIndex 
                         ? 'border-amber-500 opacity-100' 
                         : 'border-stone-200 opacity-60 hover:opacity-80'
@@ -113,10 +120,12 @@ export default function FlickrAlbum({ albumId, title = "Photo Album", photos, cl
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <img
+                    <Image
                       src={photo.url_m}
-                      alt={photo.title}
-                      className="w-full h-full object-cover"
+                      alt={photo.title || 'Thumbnail'}
+                      fill
+                      className="object-cover"
+                      sizes="64px"
                     />
                   </motion.button>
                 ))}
@@ -142,12 +151,13 @@ export default function FlickrAlbum({ albumId, title = "Photo Album", photos, cl
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
           onClick={() => setIsLightboxOpen(false)}
         >
-          <div className="relative max-w-4xl max-h-full">
-            <img
+          <div className="relative max-w-4xl max-h-full" onClick={(e) => e.stopPropagation()}>
+            <Image
               src={photos[currentIndex]?.url_o || photos[currentIndex]?.url_l || photos[currentIndex]?.url_m}
-              alt={photos[currentIndex]?.title}
+              alt={photos[currentIndex]?.title || 'Photo'}
+              width={1200}
+              height={800}
               className="max-w-full max-h-full object-contain"
-              onClick={(e) => e.stopPropagation()}
             />
             <button
               onClick={() => setIsLightboxOpen(false)}

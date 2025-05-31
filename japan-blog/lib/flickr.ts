@@ -51,17 +51,27 @@ export const getFlickrAlbum = async (albumId: string): Promise<FlickrAlbumData> 
 };
 
 // Helper to validate album data
-export const validateAlbumData = (data: any): FlickrAlbumData | null => {
-  if (!data || typeof data.id !== 'string' || !Array.isArray(data.photos)) {
+export const validateAlbumData = (data: unknown): FlickrAlbumData | null => {
+  if (!data || typeof data !== 'object' || data === null) {
+    return null;
+  }
+  
+  const albumData = data as Record<string, unknown>;
+  
+  if (typeof albumData.id !== 'string' || !Array.isArray(albumData.photos)) {
     return null;
   }
   
   return {
-    id: data.id,
-    title: data.title || 'Untitled Album',
-    description: data.description,
-    photos: data.photos.filter((photo: any) => 
-      photo && typeof photo.id === 'string' && typeof photo.url_m === 'string'
-    )
+    id: albumData.id,
+    title: typeof albumData.title === 'string' ? albumData.title : 'Untitled Album',
+    description: typeof albumData.description === 'string' ? albumData.description : undefined,
+    photos: albumData.photos.filter((photo: unknown) => {
+      if (!photo || typeof photo !== 'object' || photo === null) {
+        return false;
+      }
+      const photoData = photo as Record<string, unknown>;
+      return typeof photoData.id === 'string' && typeof photoData.url_m === 'string';
+    }) as FlickrPhoto[]
   };
 };
