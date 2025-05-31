@@ -333,11 +333,11 @@ export default function HomeClient({ entries }: HomeClientProps) {
                 <CardContent className="p-8">
                   <div className="space-y-4 text-stone-700 leading-relaxed">
                     <p>
-                    Hi! Aaron here. I travel between Japan and the United States pretty frequently, so I decided to build a blog to document my travels.
+                    Hi! Aaron here. I travel between Japan and the United States pretty frequently, so I decided to build something to document my travels.
                     </p>
                     <p>
                       This journal is built with Next.js and MDX, allowing me to easily create entries using Markdown
-                      with rich formatting, images, and more.
+                      with rich formatting, images, and more. It also has links to photo albums and vlogs.
                     </p>
                     <p>
                       Browse through entries using the timeline on the side (left on desktop, collapsible on mobile), or click on the recent entries to
