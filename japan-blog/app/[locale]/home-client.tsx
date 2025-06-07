@@ -2,22 +2,27 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { JournalEntry } from '../lib/posts';
+import { JournalEntry } from '../../lib/posts';
 import { motion } from "motion/react";
+import LanguageSwitcher from '../../components/LanguageSwitcher';
+import { getTranslation, Locale } from '../../lib/translations';
 
 // Import shadcn components
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Badge } from "../components/ui/badge";
-import { Separator } from "../components/ui/separator";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
+import { Badge } from "../../components/ui/badge";
+import { Separator } from "../../components/ui/separator";
 
 // Import Lucide icons
 import { CalendarDays, MapPin, Plane, BookOpen, ChevronDown, ChevronUp, Utensils, Camera, Building, Train, Heart, Coffee, Video, Image } from "lucide-react";
 
 interface HomeClientProps {
   entries: JournalEntry[];
+  locale: string;
 }
 
-export default function HomeClient({ entries }: HomeClientProps) {
+export default function HomeClient({ entries, locale }: HomeClientProps) {
+  const t = (key: keyof typeof import('../../lib/translations').translations.en) => 
+    getTranslation(locale as Locale, key);
   // State for showing all entries
   const [showAllEntries, setShowAllEntries] = useState(false);
   // State for mobile sidebar visibility
@@ -73,7 +78,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
       <header className="border-b border-stone-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <Link href={`/${locale === 'jp' ? 'jp' : 'en'}`} className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
                 <span className="font-bold text-lg">🇯🇵</span>
               </div>
@@ -82,17 +87,15 @@ export default function HomeClient({ entries }: HomeClientProps) {
                 <p className="text-stone-600 text-sm">Travels and daily life in Japan</p>
               </div>
             </Link>
-            <nav className="flex items-center space-x-6">
-              {/* Empty space to match post page back button */}
-              <div className="w-4 h-4"></div>
+            <nav className="flex items-center space-x-4">
               <a 
                 href="https://flic.kr/s/aHBqjCgaGe" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
               >
-                <Image className="w-4 h-4" />
-                <span className="text-sm font-medium">Photos</span>
+                <Image className="w-4 h-4" aria-label="Photos" />
+                <span className="text-sm font-medium">{t('photos')}</span>
               </a>
               <a 
                 href="https://www.youtube.com/playlist?list=PLeZOGv1nZ2p5RMu4jTovwSbIIBvOY5JaT" 
@@ -101,8 +104,9 @@ export default function HomeClient({ entries }: HomeClientProps) {
                 className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
               >
                 <Video className="w-4 h-4" />
-                <span className="text-sm font-medium">Videos</span>
+                <span className="text-sm font-medium">{t('videos')}</span>
               </a>
+              <LanguageSwitcher />
             </nav>
           </div>
         </div>
@@ -130,14 +134,14 @@ export default function HomeClient({ entries }: HomeClientProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.05 }}
             >
-              <Link href="/all-posts">
+              <Link href={`/${locale === 'jp' ? 'jp' : 'en'}/all-posts`}>
                 <Card className="border-stone-200/60 shadow-sm bg-white/60 backdrop-blur-sm hover:shadow-md transition-all duration-300 cursor-pointer group">
                   <CardContent className="px-3 py-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <BookOpen className="w-4 h-4 text-amber-600" />
                         <span className="text-base font-semibold text-stone-900 group-hover:text-amber-700 transition-colors">
-                          All Entries
+                          {t('allEntries')}
                         </span>
                       </div>
                       <div className="text-xs text-stone-500 bg-stone-100 px-2 py-1 rounded-full">
@@ -163,7 +167,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
               <CardHeader className="pb-1">
                 <CardTitle className="text-base font-semibold text-stone-900 flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-amber-600" />
-                  Recent Entries
+                  {t('recentEntries')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
@@ -185,7 +189,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
                   };
 
                   return (
-                    <Link key={entry.slug} href={`/${entry.slug}`}>
+                    <Link key={entry.slug} href={`/${locale === 'jp' ? 'jp' : 'en'}/${entry.slug}`}>
                       <motion.div 
                         className="relative px-2 py-1.5 rounded-lg transition-colors hover:bg-stone-100"
                         whileHover={{ scale: 1.02 }}
@@ -227,7 +231,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <h2 className="text-3xl font-bold text-stone-900">Journal Entries</h2>
+                  <h2 className="text-3xl font-bold text-stone-900">{t('journalEntries')}</h2>
                   <div className="flex-1 h-px bg-gradient-to-r from-stone-300 to-transparent" />
                 </div>
                 {entries.length > 2 && (
@@ -237,12 +241,12 @@ export default function HomeClient({ entries }: HomeClientProps) {
                   >
                     {showAllEntries ? (
                       <>
-                        <span>Show Recent</span>
+                        <span>{t('showRecent')}</span>
                         <ChevronUp size={16} />
                       </>
                     ) : (
                       <>
-                        <span>Show All</span>
+                        <span>{t('showAll')}</span>
                         <ChevronDown size={16} />
                       </>
                     )}
@@ -260,7 +264,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
                     whileHover={{ scale: 1.02, y: -5 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <Link href={`/${entry.slug}`}>
+                    <Link href={`/${locale === 'jp' ? 'jp' : 'en'}/${entry.slug}`}>
                       <Card
                         className="group hover:shadow-lg transition-all duration-300 border-stone-200/60 bg-white/80 backdrop-blur-sm hover:bg-white cursor-pointer"
                       >
@@ -325,7 +329,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
               transition={{ duration: 0.6, delay: 0.8 }}
             >
               <div className="flex items-center space-x-3">
-                <h2 className="text-2xl font-bold text-stone-900">About This Journal</h2>
+                <h2 className="text-2xl font-bold text-stone-900">{t('aboutTitle')}</h2>
                 <div className="flex-1 h-px bg-gradient-to-r from-stone-300 to-transparent" />
               </div>
 
@@ -333,15 +337,13 @@ export default function HomeClient({ entries }: HomeClientProps) {
                 <CardContent className="p-8">
                   <div className="space-y-4 text-stone-700 leading-relaxed">
                     <p>
-                    Hi! Aaron here. I travel between Japan and the United States pretty frequently, so I decided to build something to document my travels.
+                      {t('aboutText1')}
                     </p>
                     <p>
-                      This journal is built with Next.js and MDX, allowing me to easily create entries using Markdown
-                      with rich formatting, images, and more. It also has links to photo albums and vlogs.
+                      {t('aboutText2')}
                     </p>
                     <p>
-                      Browse through entries using the timeline on the side (left on desktop, collapsible on mobile), or click on the recent entries to
-                      read individual posts.
+                      {t('aboutText3')}
                     </p>
                   </div>
                 </CardContent>
@@ -357,7 +359,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <MapPin className="w-4 h-4 text-amber-600" />
-              <span className="text-stone-600 text-sm">Currently in Japan (JST)</span>
+              <span className="text-stone-600 text-sm">{t('currentlyIn')}</span>
             </div>
           </div>
         </div>

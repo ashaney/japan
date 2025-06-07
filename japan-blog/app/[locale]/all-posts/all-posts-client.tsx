@@ -2,19 +2,21 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { JournalEntry } from '../../lib/posts';
-import { Card, CardContent } from "../../components/ui/card";
-import { Badge } from "../../components/ui/badge";
+import { JournalEntry } from '../../../lib/posts';
+import { Card, CardContent } from "../../../components/ui/card";
+import { Badge } from "../../../components/ui/badge";
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { ArrowLeft, Calendar, Tag, Search, SortAsc, SortDesc, Image, Video } from 'lucide-react';
 
 interface AllPostsClientProps {
   entries: JournalEntry[];
+  locale: string;
 }
 
 type SortField = 'date' | 'title';
 type SortDirection = 'asc' | 'desc';
 
-export default function AllPostsClient({ entries }: AllPostsClientProps) {
+export default function AllPostsClient({ entries, locale }: AllPostsClientProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
@@ -75,7 +77,7 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
       <header className="border-b border-stone-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <Link href={`/${locale === 'jp' ? 'jp' : 'en'}`} className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
                 <span className="font-bold text-lg">🇯🇵</span>
               </div>
@@ -84,8 +86,8 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
                 <p className="text-stone-600 text-sm">Travels and daily life in Japan</p>
               </div>
             </Link>
-            <nav className="flex items-center space-x-6">
-              <Link href="/" className="text-stone-600 hover:text-amber-600 transition-colors">
+            <nav className="flex items-center space-x-4">
+              <Link href={`/${locale === 'jp' ? 'jp' : ''}`} className="text-stone-600 hover:text-amber-600 transition-colors">
                 <ArrowLeft className="w-4 h-4" />
               </Link>
               <a 
@@ -94,7 +96,7 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
               >
-                <Image className="w-4 h-4" />
+                <Image className="w-4 h-4" aria-label="Photos" />
                 <span className="text-sm font-medium">Photos</span>
               </a>
               <a 
@@ -106,6 +108,7 @@ export default function AllPostsClient({ entries }: AllPostsClientProps) {
                 <Video className="w-4 h-4" />
                 <span className="text-sm font-medium">Videos</span>
               </a>
+              <LanguageSwitcher />
             </nav>
           </div>
         </div>

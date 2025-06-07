@@ -1,10 +1,6 @@
-import HomeClient from './home-client';
-import { getAllEntries } from '../lib/posts';
+import { redirect } from 'next/navigation';
 
-export default function Home() {
-  // Get all entries on the server
-  const entries = getAllEntries();
-  
-  // Pass entries to the client component
-  return <HomeClient entries={entries} />;
+export default function RootPage() {
+  // Redirect to the default locale
+  redirect('/en');
 }

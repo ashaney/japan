@@ -18,7 +18,8 @@ export interface JournalEntry {
 // Helper function to safely parse MDX files
 function safelyParseMdx(fileName: string): JournalEntry | null {
   try {
-    const slug = fileName.replace(/\.mdx$/, '')
+    // Extract base slug from filename (remove locale and .mdx)
+    const slug = fileName.replace(/\.(en|jp)\.mdx$/, '').replace(/\.mdx$/, '')
     const fullPath = path.join(postsDirectory, fileName)
     
     // Check if file exists and is readable
@@ -66,7 +67,7 @@ function safelyParseMdx(fileName: string): JournalEntry | null {
   }
 }
 
-export function getAllEntries(): JournalEntry[] {
+export function getAllEntries(locale: string = 'en'): JournalEntry[] {
   // Handle case where directory doesn't exist
   if (!fs.existsSync(postsDirectory)) {
     console.warn(`Directory ${postsDirectory} does not exist`)
@@ -77,10 +78,40 @@ export function getAllEntries(): JournalEntry[] {
     // Get all MDX files
     const fileNames = fs.readdirSync(postsDirectory)
     
+    // Get all base entry names (without locale suffixes)
+    const baseNames = new Set()
+    const localeFiles = new Set()
+    
+    // First pass: identify all files
+    fileNames.forEach(fileName => {
+      if (fileName.endsWith('.mdx')) {
+        const baseName = fileName.replace(/\.(en|jp)\.mdx$/, '').replace(/\.mdx$/, '')
+        baseNames.add(baseName)
+        
+        if (fileName.includes(`.${locale}.mdx`)) {
+          localeFiles.add(baseName)
+        }
+      }
+    })
+    
+    // Second pass: filter files based on preference
+    const filteredFiles = fileNames.filter(fileName => {
+      if (!fileName.endsWith('.mdx')) return false
+      
+      const baseName = fileName.replace(/\.(en|jp)\.mdx$/, '').replace(/\.mdx$/, '')
+      
+      // If we have a locale-specific version, only include that
+      if (localeFiles.has(baseName)) {
+        return fileName === `${baseName}.${locale}.mdx`
+      }
+      
+      // Otherwise, include the base .mdx file
+      return fileName === `${baseName}.mdx`
+    })
+    
     // Process each file with error handling
-    const entries = fileNames
-      .filter(fileName => fileName.endsWith('.mdx'))
-      .map(safelyParseMdx)
+    const entries = filteredFiles
+      .map(fileName => safelyParseMdx(fileName))
       .filter((entry): entry is JournalEntry => entry !== null) // Filter out null entries
     
     // Sort by date (newest first)
@@ -91,19 +122,53 @@ export function getAllEntries(): JournalEntry[] {
   }
 }
 
-export function getEntryBySlug(slug: string): JournalEntry | null {
+export function getEntryBySlug(slug: string, locale: string = 'en'): JournalEntry | null {
   try {
-    const fullPath = path.join(postsDirectory, `${slug}.mdx`)
+    // Try locale-specific file first
+    const localeFileName = `${slug}.${locale}.mdx`
+    const localePath = path.join(postsDirectory, localeFileName)
     
-    // Check if file exists
-    if (!fs.existsSync(fullPath)) {
-      return null
+    if (fs.existsSync(localePath)) {
+      return safelyParseMdx(localeFileName)
     }
     
-    // Use the same safe parsing function
-    return safelyParseMdx(`${slug}.mdx`)
+    // Fallback to base .mdx file
+    const baseFileName = `${slug}.mdx`
+    const basePath = path.join(postsDirectory, baseFileName)
+    
+    if (fs.existsSync(basePath)) {
+      return safelyParseMdx(baseFileName)
+    }
+    
+    return null
   } catch (e) {
     console.error(`Error getting entry ${slug}:`, e)
     return null
+  }
+}
+
+export function getAvailableLocales(slug: string): string[] {
+  try {
+    const availableLocales: string[] = []
+    
+    // Check for base .mdx file
+    const basePath = path.join(postsDirectory, `${slug}.mdx`)
+    if (fs.existsSync(basePath)) {
+      availableLocales.push('en') // Base files default to English
+    }
+    
+    // Check for locale-specific files
+    const locales = ['en', 'jp']
+    locales.forEach(locale => {
+      const localePath = path.join(postsDirectory, `${slug}.${locale}.mdx`)
+      if (fs.existsSync(localePath) && !availableLocales.includes(locale)) {
+        availableLocales.push(locale)
+      }
+    })
+    
+    return availableLocales
+  } catch (e) {
+    console.error(`Error getting available locales for ${slug}:`, e)
+    return ['en'] // Default fallback
   }
 }

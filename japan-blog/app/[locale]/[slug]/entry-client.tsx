@@ -3,17 +3,20 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from "motion/react";
-import JournalEntry from '../../components/JournalEntry';
-import { JournalEntry as JournalEntryType } from '../../lib/posts';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import JournalEntry from '../../../components/JournalEntry';
+import { JournalEntry as JournalEntryType } from '../../../lib/posts';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
+import LanguageSwitcher from '../../../components/LanguageSwitcher';
 import { ArrowLeft, BookOpen, Image, Video, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface EntryClientProps {
   entry: JournalEntryType;
   allEntries: JournalEntryType[];
+  locale: string;
+  availableLocales: string[];
 }
 
-export default function EntryClient({ entry, allEntries }: EntryClientProps) {
+export default function EntryClient({ entry, allEntries, locale, availableLocales }: EntryClientProps) {
   // State for mobile sidebar visibility
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   
@@ -43,7 +46,7 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
       <header className="border-b border-stone-200/60 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <Link href={`/${locale === 'jp' ? 'jp' : 'en'}`} className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <div className="w-10 h-10 bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl flex items-center justify-center">
                 <span className="font-bold text-lg">🇯🇵</span>
               </div>
@@ -52,8 +55,8 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
                 <p className="text-stone-600 text-sm">Travels and daily life in Japan</p>
               </div>
             </Link>
-            <nav className="flex items-center space-x-6">
-              <Link href="/" className="text-stone-600 hover:text-amber-600 transition-colors">
+            <nav className="flex items-center space-x-4">
+              <Link href={`/${locale === 'jp' ? 'jp' : ''}`} className="text-stone-600 hover:text-amber-600 transition-colors">
                 <ArrowLeft className="w-4 h-4" />
               </Link>
               <a 
@@ -62,7 +65,7 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 text-stone-600 hover:text-amber-600 transition-colors"
               >
-                <Image className="w-4 h-4" />
+                <Image className="w-4 h-4" aria-label="Photos" />
                 <span className="text-sm font-medium">Photos</span>
               </a>
               <a 
@@ -74,6 +77,7 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
                 <Video className="w-4 h-4" />
                 <span className="text-sm font-medium">Videos</span>
               </a>
+              <LanguageSwitcher availableLocales={availableLocales} />
             </nav>
           </div>
         </div>
@@ -110,7 +114,7 @@ export default function EntryClient({ entry, allEntries }: EntryClientProps) {
               </CardHeader>
               <CardContent className="space-y-3">
                 {allEntries.map((entryItem, index) => (
-                  <Link key={entryItem.slug} href={`/${entryItem.slug}`}>
+                  <Link key={`${locale}-${entryItem.slug}`} href={`/${locale === 'jp' ? 'jp' : 'en'}/${entryItem.slug}`}>
                     <motion.div 
                       className={`relative p-2 rounded-lg transition-colors hover:bg-stone-100 ${
                         entryItem.slug === entry.slug ? 'bg-amber-50 border border-amber-200' : ''
