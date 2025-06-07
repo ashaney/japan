@@ -65,7 +65,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
   };
   
   // Entries to display in the grid
-  const displayEntries = showAllEntries ? entries : entries.slice(0, 4);
+  const displayEntries = showAllEntries ? entries : entries.slice(0, 2);
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 to-amber-50/30">
@@ -230,7 +230,7 @@ export default function HomeClient({ entries }: HomeClientProps) {
                   <h2 className="text-3xl font-bold text-stone-900">Journal Entries</h2>
                   <div className="flex-1 h-px bg-gradient-to-r from-stone-300 to-transparent" />
                 </div>
-                {entries.length > 4 && (
+                {entries.length > 2 && (
                   <button 
                     className="flex items-center gap-1 text-sm text-stone-600 hover:text-stone-900 transition-colors"
                     onClick={toggleShowAll}
